@@ -47,7 +47,7 @@ GameMaker extension methods only use `String` and `double` for parameters and re
 
 ### Icons
 
-* Be sure to prepare `default`, `store`, and `leanback` icons for your game. Check out the [content review guidelines](content-review-guidelines.md#user-content-icons) for details.
+* Be sure to prepare `default`, `store`, and `leanback` icons for your game. Check out the [content review guidelines](https://github.com/ouya/docs/blob/razer-sdk/content-review-guidelines.md#user-content-icons) for details.
 
 #### Store Icon
 
