@@ -42,7 +42,7 @@
 
 ## RazerSDK Extension
 
-The `RazerSDK-GameMaker-Extension` is available in the [`releases section`](#user-content-user-content-releases).
+The `RazerSDK-GameMaker-Extension` is available in the [`releases section`](#user-content-releases).
 GameMaker extension methods only use `String` and `double` for parameters and return types.
 
 ### Icons
