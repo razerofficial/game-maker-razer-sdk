@@ -364,8 +364,19 @@ The first parameter is a `string` comma separated list of identifiers.
 
 `RazerSDK_RequestPurchase` is an async call that requests purchase of a `Product`.
 The first parameter is a `string` which is a `Product` identifier.
+The second parameter is a `string` which is the `Product Type` ("ENTITLEMENT" or "CONSUMABLE").
 
 `RazerSDK_GetAsyncMethod` will return `onSuccessRequestPurchase`, `onFailureRequestPurchase` or `onCancelRequestPurchase` when the request has completed.
+
+```
+identifier = "YOUR_PRODUCT_ID";
+
+// Purchase Entitlement
+RazerSDK_RequestPurchase(identifier, "ENTITLEMENT");
+
+// Purchase Consumable
+RazerSDK_RequestPurchase(identifier, "CONSUMABLE");
+```
 
 ### RazerSDK_RequestReceipts
 
