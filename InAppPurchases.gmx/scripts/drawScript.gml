@@ -154,7 +154,7 @@ if (RazerSDK_GetAnyButtonUp(BUTTON_O))
         if (products_index < array_length_1d(product_ids) &&
             products_length > 0)
         {
-            RazerSDK_RequestPurchase(product_ids[products_index]);
+            RazerSDK_RequestPurchase(product_ids[products_index], "ENTITLEMENT");
         }
         else
         {

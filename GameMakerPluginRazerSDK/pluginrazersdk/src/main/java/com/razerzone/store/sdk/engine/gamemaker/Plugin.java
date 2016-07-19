@@ -899,7 +899,7 @@ public class Plugin {
         return sNoop;
     }
 
-    public static double requestPurchase(final String identifier) {
+    public static double requestPurchase(final String identifier, final String productType) {
         if (null == sStoreFacade) {
             Log.e(TAG, "StoreFacade is null!");
             return sNoop;
@@ -915,7 +915,7 @@ public class Plugin {
         }
         Runnable runnable = new Runnable() {
             public void run() {
-                Product product = new Product(identifier, "", 0, 0, "", 0, 0, "", "", Product.Type.ENTITLEMENT);
+                Product product = new Product(identifier, "", 0, 0, "", 0, 0, "", "", Product.Type.valueOf(productType));
                 Purchasable purchasable = product.createPurchasable();
                 sStoreFacade.requestPurchase(activity, purchasable, sRequestPurchaseListener);
             }

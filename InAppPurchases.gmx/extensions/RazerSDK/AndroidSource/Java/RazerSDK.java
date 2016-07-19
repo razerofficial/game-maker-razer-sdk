@@ -206,11 +206,11 @@ public class RazerSDK extends RunnerSocial implements RunnerRelay {
         return Plugin.requestProducts(identifiers);
     }
 
-    public double requestPurchase(final String identifier) {
+    public double requestPurchase(final String identifier, final String productType) {
         if (sEnableLogging) {
             Log.d(TAG, "requestPurchase:");
         }
-        return Plugin.requestPurchase(identifier);
+        return Plugin.requestPurchase(identifier, productType);
     }
 
     public double requestReceipts() {
