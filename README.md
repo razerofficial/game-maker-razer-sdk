@@ -18,7 +18,7 @@
 
 ## Guide
 
-* In your project's `Global Game Settings`, on the `Android` tab enter your `Package name` matching the [developer portal](http://devs.ouya.tv) and check `Enable OUYA packaging`.
+* In your project's `Global Game Settings`, on the `Android` tab, in `General`, enter your `Package name` matching the [developer portal](http://devs.ouya.tv) and check `Enable OUYA packaging`.
 
 ![Global settings](images-md/image_2.png)
 
