@@ -51,11 +51,11 @@ GameMaker extension methods only use `String` and `double` for parameters and re
 
 #### Store Icon
 
-* Edit the game icons in the `Global Game Settings`. In the `Project View`, `right-click` on `Global Game Settings` and choose `Properties`.
+* Edit the game icons in the `Global Game Settings`. In the `Project View`, `double-left-click` on `Global Game Settings`.
 
 ![image_7](images-md/image_7.png)
 
-* On the settings `Android` tab be sure to `Enable` the option for `Enable OUYA packaging` to be able to set the `store` icon in the `GUI`. And click `OK` to accept the changes.
+* On the settings `Android` tab, in the `Extras`, be sure to `Enable` the option for `Enable OUYA packaging` to be able to set the `store` icon in the `GUI`. And click `OK` to accept the changes.
 
 ![image_8](images-md/image_8.png)
 
@@ -74,11 +74,11 @@ GameMaker extension methods only use `String` and `double` for parameters and re
 	android:logo="@drawable/banner">
 ```
 
-Enable support for the `leanback` icon by setting the min platform to **API 16: Android 4.1 (Jelly Bean)** and the target platform to **API 21: Android 5.0 (Lollipop)**.
+Enable support for the `leanback` icon by setting the min platform to **API 19: Android 4.4 (KitKat)** and the target platform to **API 21: Android 5.0 (Lollipop)**.
 
 ```xml
     <uses-sdk
-        android:minSdkVersion="16"
+        android:minSdkVersion="19"
         android:targetSdkVersion="21" />
 ```
 
