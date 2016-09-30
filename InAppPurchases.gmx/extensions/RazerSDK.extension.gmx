@@ -3,7 +3,7 @@
   <name>RazerSDK</name>
   <version>1.0.0</version>
   <packageID>com.razerzone.store.sdk.engine.gamemaker</packageID>
-  <ProductID>ACBD3CFF4E539AD869A0E8E3B4B022DD</ProductID>
+  <ProductID></ProductID>
   <date>06/07/16</date>
   <license>Free to use, also for commercial games.</license>
   <description></description>
@@ -250,6 +250,15 @@
           <args>
             <arg>1</arg>
           </args>
+        </function>
+        <function>
+          <name>RazerSDK_RequestLogin</name>
+          <externalName>requestLogin</externalName>
+          <kind>11</kind>
+          <help></help>
+          <returnType>2</returnType>
+          <argCount>0</argCount>
+          <args/>
         </function>
         <function>
           <name>RazerSDK_RequestGamerInfo</name>

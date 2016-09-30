@@ -191,6 +191,13 @@ public class RazerSDK extends RunnerSocial implements RunnerRelay {
         }
         return Plugin.popAsyncResult();
     }
+	
+    public double requestLogin() {
+        if (sEnableLogging) {
+            Log.d(TAG, "requestLogin:");
+        }
+        return Plugin.requestLogin();
+    }
 
     public double requestGamerInfo() {
         if (sEnableLogging) {

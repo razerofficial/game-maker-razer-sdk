@@ -50,9 +50,9 @@ import java.util.List;
 public class Plugin {
     private static final String TAG = Plugin.class.getSimpleName();
 
-    private static final boolean sEnableLogging = true;
+    private static final boolean sEnableLogging = false;
 
-    private static final boolean sEnableInputLogging = true;
+    private static final boolean sEnableInputLogging = false;
 
     private static final String sFalse = "false";
     private static final String sTrue = "true";
@@ -67,11 +67,17 @@ public class Plugin {
     // Your game talks to the StoreFacade, which hides all the mechanics of doing an in-app purchase.
     private static StoreFacade sStoreFacade = null;
 
-    // listener for fetching gamer info
-    private static CancelIgnoringResponseListener<GamerInfo> sRequestGamerInfoListener = null;
+    // listener for init complete
+    private static CancelIgnoringResponseListener<Bundle> sInitCompleteListener = null;
+
+    // listener for requesting login
+    private static ResponseListener<Void> sRequestLoginListener = null;
+
+    // listener for requesting gamer info
+    private static ResponseListener<GamerInfo> sRequestGamerInfoListener = null;
 
     // listener for getting products
-    private static CancelIgnoringResponseListener<List<Product>> sRequestProductsListener = null;
+    private static ResponseListener<List<Product>> sRequestProductsListener = null;
 
     // listener for requesting purchase
     private static ResponseListener<PurchaseResult> sRequestPurchaseListener = null;
@@ -473,14 +479,97 @@ public class Plugin {
                         Log.d(TAG, "developer_public_key length=" + developerInfo.getByteArray(StoreFacade.DEVELOPER_PUBLIC_KEY).length);
                     }
 
+                    sInitCompleteListener = new CancelIgnoringResponseListener<Bundle>() {
+                        @Override
+                        public void onSuccess(Bundle bundle) {
+                            if (sEnableLogging) {
+                                Log.d(TAG, "InitCompleteListener: onSuccess");
+                            }
+                            JSONObject json = new JSONObject();
+                            try {
+                                json.put("method", "onSuccessInit");
+                            } catch (JSONException e1) {
+                            }
+                            String jsonData = json.toString();
+                            sAsyncResults.add(jsonData);
+                            sInitialized = true;
+                        }
+
+                        @Override
+                        public void onFailure(int errorCode, String errorMessage, Bundle optionalData) {
+                            if (sEnableLogging) {
+                                Log.d(TAG, "InitCompleteListener: onFailure errorCode="+errorCode+" errorMessage="+errorMessage);
+                            }
+                            JSONObject json = new JSONObject();
+                            try {
+                                json.put("method", "onFailureInit");
+                                JSONObject data = new JSONObject();
+                                data.put("errorCode", Integer.toString(errorCode));
+                                data.put("errorMessage", errorMessage);
+                                json.put("data", data);
+                            } catch (JSONException e1) {
+                            }
+                            String jsonData = json.toString();
+                            sAsyncResults.add(jsonData);
+                        }
+                    };
+
                     sStoreFacade = StoreFacade.getInstance();
                     try {
-                        sStoreFacade.init(activity, developerInfo);
+                        sStoreFacade.init(activity, developerInfo, sInitCompleteListener);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
-                    sRequestGamerInfoListener = new CancelIgnoringResponseListener<GamerInfo>() {
+                    sRequestLoginListener = new ResponseListener<Void>() {
+                        @Override
+                        public void onSuccess(Void result) {
+                            if (sEnableLogging) {
+                                Log.d(TAG, "sRequestLoginListener: onSuccess");
+                            }
+                            JSONObject json = new JSONObject();
+                            try {
+                                json.put("method", "onSuccessRequestLogin");
+                            } catch (JSONException e1) {
+                            }
+                            String jsonData = json.toString();
+                            sAsyncResults.add(jsonData);
+                        }
+
+                        @Override
+                        public void onFailure(int errorCode, String errorMessage, Bundle optionalData) {
+                            if (sEnableLogging) {
+                                Log.e(TAG, "sRequestLoginListener: onFailure errorCode=" + errorCode + " errorMessage=" + errorMessage);
+                            }
+                            JSONObject json = new JSONObject();
+                            try {
+                                json.put("method", "onFailureRequestLogin");
+                                JSONObject data = new JSONObject();
+                                data.put("errorCode", Integer.toString(errorCode));
+                                data.put("errorMessage", errorMessage);
+                                json.put("data", data);
+                            } catch (JSONException e1) {
+                            }
+                            String jsonData = json.toString();
+                            sAsyncResults.add(jsonData);
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            if (sEnableLogging) {
+                                Log.d(TAG, "sRequestLoginListener: onCancel");
+                            }
+                            JSONObject json = new JSONObject();
+                            try {
+                                json.put("method", "onCancelRequestLogin");
+                            } catch (JSONException e1) {
+                            }
+                            String jsonData = json.toString();
+                            sAsyncResults.add(jsonData);
+                        }
+                    };
+
+                    sRequestGamerInfoListener = new ResponseListener<GamerInfo>() {
                         @Override
                         public void onSuccess(GamerInfo info) {
                             if (null == info) {
@@ -488,7 +577,7 @@ public class Plugin {
                                 return;
                             }
                             if (sEnableLogging) {
-                                Log.i(TAG, "sRequestGamerInfoListener: onSuccess uuid=" + info.getUuid() + " username=" + info.getUsername());
+                                Log.d(TAG, "sRequestGamerInfoListener: onSuccess uuid=" + info.getUuid() + " username=" + info.getUsername());
                             }
                             JSONObject json = new JSONObject();
                             try {
@@ -520,9 +609,23 @@ public class Plugin {
                             String jsonData = json.toString();
                             sAsyncResults.add(jsonData);
                         }
+
+                        @Override
+                        public void onCancel() {
+                            if (sEnableLogging) {
+                                Log.d(TAG, "sRequestGamerInfoListener: onCancel");
+                            }
+                            JSONObject json = new JSONObject();
+                            try {
+                                json.put("method", "onCancelRequestGamerInfo");
+                            } catch (JSONException e1) {
+                            }
+                            String jsonData = json.toString();
+                            sAsyncResults.add(jsonData);
+                        }
                     };
 
-                    sRequestProductsListener = new CancelIgnoringResponseListener<List<Product>>() {
+                    sRequestProductsListener = new ResponseListener<List<Product>>() {
                         @Override
                         public void onSuccess(final List<Product> products) {
                             if (null == products) {
@@ -577,6 +680,20 @@ public class Plugin {
                             String jsonData = json.toString();
                             sAsyncResults.add(jsonData);
                         }
+
+                        @Override
+                        public void onCancel() {
+                            if (sEnableLogging) {
+                                Log.i(TAG, "sRequestProductsListener: onCancel");
+                            }
+                            JSONObject json = new JSONObject();
+                            try {
+                                json.put("method", "onCancelRequestProducts");
+                            } catch (JSONException e1) {
+                            }
+                            String jsonData = json.toString();
+                            sAsyncResults.add(jsonData);
+                        }
                     };
 
                     sRequestPurchaseListener = new ResponseListener<PurchaseResult>() {
@@ -595,6 +712,7 @@ public class Plugin {
                                 json.put("method", "onSuccessRequestPurchase");
                                 JSONObject data = new JSONObject();
                                 data.put("identifier", result.getProductIdentifier());
+                                data.put("ownerId", result.getOrderId());
                                 json.put("data", data);
                             } catch (JSONException e1) {
                             }
@@ -737,9 +855,6 @@ public class Plugin {
                     };
 
                     Controller.init(activity);
-
-                    sInitialized = true;
-                    sendOnSuccessInit();
                 }
             };
             activity.runOnUiThread(runnable);
@@ -802,30 +917,6 @@ public class Plugin {
         return true;
     }
 
-    private static void sendOnSuccessInit() {
-        if (null == sStoreFacade) {
-            Log.e(TAG, "StoreFacade is null!");
-            return;
-        }
-        if (sStoreFacade.isInitialized()) {
-            JSONObject json = new JSONObject();
-            try {
-                json.put("method", "onSuccessInit");
-            } catch (JSONException e) {
-            }
-            String jsonData = json.toString();
-            sAsyncResults.add(jsonData);
-            return;
-        }
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                sendOnSuccessInit();
-            }
-        }, 1000);
-    }
-
     public static String popAsyncResult() {
         if (sAsyncResults.size() > 0) {
             sAsyncResults.remove(0);
@@ -847,6 +938,29 @@ public class Plugin {
 
         // Forward this result to the facade, in case it is waiting for any activity results
         sStoreFacade.processActivityResult(requestCode, resultCode, data);
+    }
+
+    public static double requestLogin() {
+        if (null == sStoreFacade) {
+            Log.e(TAG, "StoreFacade is null!");
+            return sNoop;
+        }
+        final Activity activity = Plugin.getRelay().getCurrentActivity();
+        if (null == activity) {
+            Log.d(TAG, "requestLogin: Activity is null");
+            return sNoop;
+        }
+        if (null == sRequestLoginListener) {
+            Log.e(TAG, "requestLogin: sRequestLoginListener is null");
+            return sNoop;
+        }
+        Runnable runnable = new Runnable() {
+            public void run() {
+                sStoreFacade.requestLogin(activity, sRequestLoginListener);
+            }
+        };
+        activity.runOnUiThread(runnable);
+        return sNoop;
     }
 
     public static double requestGamerInfo() {
