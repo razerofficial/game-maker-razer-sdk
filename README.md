@@ -347,11 +347,21 @@ for (var index = 0; index < count; ++index)
 }
 ```
 
+### RazerSDK_RequestLogin
+
+`RazerSDK_RequestLogin` is an async call that opens the login dialog to sign in the user.
+
+`RazerSDK_GetAsyncMethod` will return `onSuccessRequestLogin` or `onFailureRequestLogin` when the request has completed.
+
+The success event indicates the user has successfully signed in or the user was already signed in. The failure event indicates there was a problem signing in. The cancel event indicates the user canceled signing in.
+
 ### RazerSDK_RequestGamerInfo
 
 `RazerSDK_RequestGamerInfo` is an async call that provides access to the `GamerInfo` which has the gamer's `uuid` and `username`.
 
 `RazerSDK_GetAsyncMethod` will return `onSuccessRequestGamerInfo` or `onFailureRequestGamerInfo` when the request has completed.
+
+The failure event will be invoked if the user is not signed in.
 
 ### RazerSDK_RequestProducts
 
@@ -368,6 +378,8 @@ The second parameter is a `string` which is the `Product Type` ("ENTITLEMENT" or
 
 `RazerSDK_GetAsyncMethod` will return `onSuccessRequestPurchase`, `onFailureRequestPurchase` or `onCancelRequestPurchase` when the request has completed.
 
+The failure event will be invoked if the user is not signed in.
+
 ```
 identifier = "YOUR_PRODUCT_ID";
 
@@ -383,6 +395,8 @@ RazerSDK_RequestPurchase(identifier, "CONSUMABLE");
 `RazerSDK_RequestReceipts` is an async call that requests all the `entitlement` purchases on the server.
 
 `RazerSDK_GetAsyncMethod` will return `onSuccessRequestReceipts`, `onFailureRequestReceipts` or `onCancelRequestReceipts` when the request has completed.
+
+The failure event will be invoked if the user is not signed in.
 
 ### RazerSDK_Shutdown
 
